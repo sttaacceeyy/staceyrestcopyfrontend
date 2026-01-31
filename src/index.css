@@ -1,0 +1,144 @@
+/* Steakz MIS Theme - Blue & White */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f0f4f8;
+  color: #1a1a1a;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+h1, h2, h3 {
+  color: #003d82;
+  font-family: 'Merriweather', serif;
+}
+
+button {
+  padding: 10px 24px;
+  background-color: #0066cc;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover {
+  background-color: #0052a3;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #b3d9ff;
+  border-radius: 4px;
+  background: #f8fbff;
+  font-size: 1rem;
+}
+
+/* Navbar */
+.navbar {
+  background: linear-gradient(90deg, #003d82 60%, #0066cc 100%);
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0,61,130,0.08);
+}
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  height: 64px;
+}
+.logo {
+  color: #f8fbff;
+  font-size: 2rem;
+  font-family: 'Merriweather', serif;
+  text-decoration: none;
+  letter-spacing: 2px;
+}
+.nav-links {
+  display: flex;
+  gap: 28px;
+}
+.nav-links a {
+  color: #f8fbff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover {
+  color: #4da6ff;
+}
+.nav-links button {
+  background: #f8fbff;
+  color: #003d82;
+  border: 1px solid #0066cc;
+  border-radius: 4px;
+  padding: 6px 16px;
+  font-size: 1rem;
+  margin-left: 10px;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-links button:hover {
+  background: #4da6ff;
+  color: #0052a3;
+}
+
+/* Card styles for home/menu */
+.post-list, .menu-list {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+.post-card, .menu-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,102,204,0.08);
+  padding: 24px;
+  transition: box-shadow 0.2s;
+}
+.post-card:hover, .menu-card:hover {
+  box-shadow: 0 4px 16px rgba(0,102,204,0.16);
+}
+
+.first-comment {
+  color: #0066cc;
+  font-style: italic;
+}
+
+/* Reservation and contact */
+.reservation-form, .contact-form {
+  background: #f8fbff;
+  border-radius: 10px;
+  padding: 32px 24px;
+  box-shadow: 0 2px 8px rgba(0,61,130,0.06);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+label {
+  font-weight: 500;
+  color: #003d82;
+}
+
+@media (max-width: 700px) {
+  .navbar .container {
+    flex-direction: column;
+    height: auto;
+    padding: 12px 8px;
+  }
+  .nav-links {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .container {
+    padding: 16px 4px;
+  }
+}

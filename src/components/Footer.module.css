@@ -1,0 +1,27 @@
+.footer {
+  background: #003d82;
+  color: #f8fbff;
+  padding: 32px 0 16px 0;
+  text-align: center;
+  font-size: 1rem;
+}
+.info {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.socials {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+.socials img {
+  width: 28px;
+  height: 28px;
+  filter: brightness(0) invert(1);
+  transition: filter 0.2s;
+}
+.socials img:hover {
+  filter: brightness(0.8) sepia(1) hue-rotate(-30deg) saturate(4);
+}
