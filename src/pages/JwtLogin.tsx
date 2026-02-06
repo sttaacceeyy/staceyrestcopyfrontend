@@ -100,7 +100,7 @@ const Login: React.FC = () => {
         generateJwt('customer', username),
         { id: username, name: username, role: 'customer' }
       );
-      navigate('/');
+      navigate('/dashboard/customer');
       return;
     }
     setError('Login failed');

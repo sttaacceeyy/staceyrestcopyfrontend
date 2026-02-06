@@ -32,6 +32,21 @@ export const AuthContext = createContext<AuthContextType & { loading: boolean }>
   loading: true,
 });
 
+const normalizeRole = (role: string): UserRole => {
+  if (!role) return 'customer';
+  const roleMap: { [key: string]: UserRole } = {
+    'CHEF': 'chef',
+    'CASHIER': 'cashier',
+    'BRANCHMANAGER': 'branchManager',
+    'HQMANAGER': 'hqManager',
+    'ADMIN': 'admin',
+    'CUSTOMER': 'customer',
+    'MANAGER': 'branchManager',
+    'WRITER': 'customer',
+  };
+  return roleMap[role.toUpperCase()] || 'customer';
+};
+
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -48,8 +63,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setUser({
         id: userData.id,
         name: userData.username || userData.name,
-        role: userData.role,
-        branchId: userData.branchId,
+        role: normalizeRole(userData.role),
+        branchId: userData.branchId ? String(userData.branchId) : undefined,
         loginTime: new Date().toISOString(),
       });
     }
@@ -61,19 +76,30 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (!user) {
       const storedUser = localStorage.getItem('user');
       if (storedUser) {
-        setUser(JSON.parse(storedUser));
+        const userData = JSON.parse(storedUser);
+        setUser({
+          ...userData,
+          role: normalizeRole(userData.role),
+          branchId: userData.branchId ? String(userData.branchId) : undefined,
+        });
       }
     }
   }, [user]);
 
   const login = (token: string, user: RBACUser) => {
+    const normalizedRole = normalizeRole(user.role);
+    const normalizedUser = {
+      ...user,
+      role: normalizedRole,
+      branchId: user.branchId ? String(user.branchId) : undefined,
+    };
     setToken(token);
-    setUser({ ...user, loginTime: new Date().toLocaleString() });
+    setUser({ ...normalizedUser, loginTime: new Date().toLocaleString() });
     localStorage.setItem('authToken', token);
-    localStorage.setItem('user', JSON.stringify({ ...user, loginTime: new Date().toLocaleString() }));
+    localStorage.setItem('user', JSON.stringify({ ...normalizedUser, loginTime: new Date().toLocaleString() }));
     addLog({
-      username: user.name,
-      role: user.role,
+      username: normalizedUser.name,
+      role: normalizedRole,
       time: new Date().toLocaleString(),
       status: 'success',
     });

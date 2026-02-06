@@ -2,8 +2,24 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { RegisteredUsersContext } from '../context/RegisteredUsersContext';
+import { UserRole } from '../types';
 import styled from 'styled-components';
 import { login as apiLogin } from '../services/api';
+
+const normalizeRole = (role: string): UserRole => {
+  if (!role) return 'customer';
+  const roleMap: { [key: string]: UserRole } = {
+    'CHEF': 'chef',
+    'CASHIER': 'cashier',
+    'BRANCHMANAGER': 'branchManager',
+    'HQMANAGER': 'hqManager',
+    'ADMIN': 'admin',
+    'CUSTOMER': 'customer',
+    'MANAGER': 'branchManager',
+    'WRITER': 'customer',
+  };
+  return roleMap[role.toUpperCase()] || 'customer';
+};
 
 const Card = styled.div`
   background: #fff;
@@ -217,12 +233,19 @@ const Login: React.FC = () => {
 
   const handleLoginSuccess = (response: any, authLogin: any, navigate: any) => {
     if (response.user) {
-      localStorage.setItem('authToken', response.token);
-      localStorage.setItem('user', JSON.stringify(response.user));
+      const normalizedRole = normalizeRole(response.user.role);
+      const normalizedUser = {
+        ...response.user,
+        role: normalizedRole,
+        branchId: response.user.branchId ? String(response.user.branchId) : undefined,
+      };
       
-      const user = response.user;
+      localStorage.setItem('authToken', response.token);
+      localStorage.setItem('user', JSON.stringify(normalizedUser));
+      
+      const user = normalizedUser;
       console.log('[Login] Parsed user:', user);
-      console.log('[Login] User role:', user.role);
+      console.log('[Login] User role (normalized):', user.role);
       console.log('[Login] User branchId:', user.branchId);
       
       // Update AuthContext
@@ -239,11 +262,12 @@ const Login: React.FC = () => {
                 : user.branchId === '2' ? '/dashboard/chef/branch2' 
                 : user.branchId === '3' ? '/dashboard/chef/branch3' 
                 : '/',
-        'cashier': '/dashboard/cashier',
-        'manager': '/dashboard/branch',
-        'branchManager': '/dashboard/branch',
+        'cashier': '/dashboard/cashier/orders',
+        'manager': '/dashboard/branch/reports',
+        'branchManager': '/dashboard/branch/reports',
         'hqManager': '/dashboard/hq/reports',
         'admin': '/admin/users',
+        'customer': '/dashboard/customer',
       };
       
       const redirectUrl = roleRoutes[user.role] || '/';

@@ -41,6 +41,9 @@ import AdminMenuManagement from './pages/admin/AdminMenuManagement';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import CardPayment from './pages/CardPayment';
 import CashierDashboard from './pages/dashboard/CashierDashboard';
+import CustomerDashboard from './pages/dashboard/CustomerDashboard';
+import BranchManagerDashboard from './pages/dashboard/BranchManagerDashboard';
+import HQManagerDashboard from './pages/dashboard/HQManagerDashboard';
 import ManagerOrders from './pages/dashboard/ManagerOrders';
 import ManagerKitchen from './pages/dashboard/ManagerKitchen';
 import ManagerStaff from './pages/dashboard/ManagerStaff';
@@ -141,6 +144,8 @@ const App: React.FC = () => {
                                   <Route path="/" element={<Navigate to="/dashboard/branch/reports" replace />} />
                                   ) : user?.role === 'cashier' ? (
                                   <Route path="/" element={<Navigate to="/dashboard/cashier/orders" replace />} />
+                                  ) : user?.role === 'customer' ? (
+                                  <Route path="/" element={<Navigate to="/dashboard/customer" replace />} />
                                   ) : (
                                   <Route path="/" element={<Home />} />
                                 )}
@@ -160,9 +165,9 @@ const App: React.FC = () => {
                                   </ProtectedRoute>
                                 } />
                                 {/* MANAGER: Only manager dashboard */}
-                                <Route path="/dashboard/branch" element={['branchManager','admin'].includes(user?.role || '') ? <Dashboard /> : <Forbidden />} />
+                                <Route path="/dashboard/branch" element={['branchManager','admin'].includes(user?.role || '') ? <BranchManagerDashboard /> : <Forbidden />} />
                                 <Route path="/inventory" element={['branchManager','hqManager','admin'].includes(user?.role || '') ? <Inventory /> : <Forbidden />} />
-                                <Route path="/dashboard/hq" element={['hqManager','admin'].includes(user?.role || '') ? <Dashboard /> : <Forbidden />} />
+                                <Route path="/dashboard/hq" element={['hqManager','admin'].includes(user?.role || '') ? <HQManagerDashboard /> : <Forbidden />} />
                                 {/* CASHIER: Always allow access to all POS features */}
                                 <Route path="/dashboard/cashier" element={
                                   user?.role === 'cashier' ? <CashierDashboard /> : <Forbidden />
@@ -176,6 +181,8 @@ const App: React.FC = () => {
                                 <Route path="/dashboard/cashier/kitchen" element={
                                   user?.role === 'cashier' ? <CashierDashboard tab="kitchen" /> : <Forbidden />
                                 } />
+                                {/* CUSTOMER: Customer dashboard */}
+                                <Route path="/dashboard/customer" element={user?.role === 'customer' ? <CustomerDashboard /> : <Forbidden />} />
                                 {/* BRANCH_MANAGER: Direct links for each page, no portal */}
                                 <Route path="/dashboard/branch/reports" element={user?.role === 'branchManager' ? <BranchReports /> : <Forbidden />} />
                                 <Route path="/dashboard/branch/inventory" element={user?.role === 'branchManager' ? <BranchInventoryManagement /> : <Forbidden />} />
